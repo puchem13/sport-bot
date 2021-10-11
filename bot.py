@@ -5,19 +5,16 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta, time
 import schedule
 import time as t
+import yaml
 
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path = env_path)
-scheduleDict = {
-    "Monday": {"time": "17:00", 
-                "cancelled": False},
-    "Thursday": {"time": "7:15", 
-                "cancelled": False},
-    "Friday": {"time": "17:00", 
-                "cancelled": False},
-    "Saturday": {"time": "10:00",
-                "cancelled": False}
-}
+
+def read_yaml(file_path):
+    with open(file_path, "r") as f:
+        return yaml.safe_load(f)
+
+scheduleDict = read_yaml(os.environ['CONFIG_FILE'])
 
 def post_message(message):
     client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
