@@ -1,3 +1,5 @@
+import json
+
 import slack
 import os
 from pathlib import Path
@@ -14,24 +16,31 @@ def read_yaml(file_path):
     with open(file_path, "r") as f:
         return yaml.safe_load(f)
 
-scheduleDict = read_yaml(os.environ['CONFIG_FILE'])
+jsonEvents = read_yaml(os.environ['CONFIG_FILE'])
 
 def post_message(message):
     client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
     client.chat_postMessage(channel='#testing-sport-bot', text=message)
 
 def get_message(day):
-    if day in scheduleDict:
-        TIME = scheduleDict[day]["time"]
-        return (
-            ":running::woman-running:*Will you be joining " 
-            f"the running event on {day} at {TIME}?*:running_shirt_with_sash:\n"
-            "Please react to this message with :thumbsup: :thumbsdown:"
-            )
+    for event in jsonEvents["EVENTS"].items():
+        event_name, details = event
+        event_day = details["DAY"]
+        event_time = details["TIME"]
+        print("Current processed event: "+ event_name)
+        if (details["ACTIVE"]):
+            print("event is active and can be checked")
+            if (event_day == day):
+                print("we need to announce this event in slack")
+                return (
+                    ":running::woman-running:*Will you be joining " 
+                    f"the running event on {event_day} at {event_time}?*:running_shirt_with_sash:\n"
+                    "Please react to this message with :thumbsup: :thumbsdown:"
+                    )
 
 def check_event(day, startTime, endTime):
-    if day in scheduleDict and not scheduleDict[day]["cancelled"]:
-            eventTime = datetime.strptime(scheduleDict[day]["time"],'%H:%S')
+    if day in jsonEvents and not jsonEvents[day]["cancelled"]:
+            eventTime = datetime.strptime(jsonEvents[day]["time"], '%H:%S')
             if startTime < eventTime.time() and eventTime.time() < endTime:
                 return True
     return False
