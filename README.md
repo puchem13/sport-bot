@@ -11,7 +11,7 @@ Developing a [Slack Bot](https://slack.com/intl/en-in/help/articles/115005265703
 
 ## Environment Variables 🌎
 
-To run this project, you will need to add a [`SLACK_TOKEN`](https://slack.dev/python-slack-sdk/web/index.html) to your .env file
+To run this project, you will need to add `CONFIG_FILE` for configuration, as well as [`SLACK_TOKEN`](https://slack.dev/python-slack-sdk/web/index.html) to your .env file
 
 
 ## Run Locally 📝
@@ -26,7 +26,7 @@ Go to the project directory
   $ cd sport-bot
 ```
 
-Create a .env file and add `SLACK_TOKEN`
+Create a .env file and add the environment variables.
 ```bash
   $ cat > .env
 ```
