@@ -1,6 +1,6 @@
 import json
 
-import slack
+from slack_sdk import WebClient
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -17,9 +17,9 @@ def read_yaml(file_path):
         return yaml.safe_load(f)
 
 jsonEvents = read_yaml(os.environ['CONFIG_FILE'])
+client = WebClient(token=os.environ['SLACK_TOKEN'])
 
 def post_message(message):
-    client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
     client.chat_postMessage(channel='#testing-sport-bot', text=message)
 
 def get_message(day):
@@ -33,7 +33,7 @@ def get_message(day):
             if (event_day == day):
                 print("we need to announce this event in slack")
                 return (
-                    ":running::woman-running:*Will you be joining " 
+                    ":running::woman-running:*Will you be joining "
                     f"the running event on {event_day} at {event_time}?*:running_shirt_with_sash:\n"
                     "Please react to this message with :thumbsup: :thumbsdown:"
                     )
