@@ -26,12 +26,12 @@ def post_message(message):
 
 def get_messages(day):
     event_to_send_list = []
-    for event in jsonEvents["EVENTS"].items():
+    for event in jsonEvents["events"].items():
         event_name, details = event
-        event_day = details["DAY"]
-        event_time = details["TIME"]
+        event_day = details["day"]
+        event_time = details["time"]
         print("Current processed event: " + event_name)
-        if details["ACTIVE"]:
+        if details["ative"]:
             print("event is active and can be checked")
             if event_day == day:
                 print("we need to announce this event in slack")
